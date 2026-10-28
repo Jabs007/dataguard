@@ -1,0 +1,182 @@
+/* DataGuard web styles — minimal, readable, responsive. */
+
+:root {
+  --bg: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --bg-panel: #f9fafb;
+  --error-bg: #fef2f2;
+  --error-text: #b91c1c;
+  --ok-bg: #f0fdf4;
+  --ok-text: #15803d;
+  --warn-bg: #fffbeb;
+  --warn-text: #92400e;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+html { line-height: 1.5; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  margin: 0;
+  padding: 0;
+}
+
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 1.5rem; }
+
+.site-header {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+}
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+.tag {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+main { padding: 2rem 0; }
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-panel {
+  background: var(--error-bg);
+  border-color: #fecaca;
+}
+
+h1 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+h2 { font-size: 1.25rem; margin: 1.5rem 0 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+p { margin: 0 0 1rem; }
+.lead { color: var(--muted); max-width: 60ch; }
+
+.file-name { font-weight: 600; color: var(--accent); }
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  text-align: center;
+}
+.stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.stat-label { font-size: 0.8rem; color: var(--muted); }
+
+.upload-form { max-width: 420px; }
+.file-label {
+  display: block;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.file-label:hover { border-color: var(--accent); }
+.file-label input { display: none; }
+.file-label-text { color: var(--text); font-size: 1rem; }
+.hint { font-size: 0.85rem; color: var(--muted); margin: 0.5rem 0 0; }
+
+.form-actions { margin-top: 1rem; }
+
+.button {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.button-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.button-primary:hover { background: var(--accent-hover); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: #fff;
+}
+th, td {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+th { background: var(--bg-panel); font-weight: 600; color: var(--text); }
+tr:last-child td { border-bottom: none; }
+
+.finding-type .badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.examples { white-space: pre-wrap; max-width: 200px; }
+
+.empty-state {
+  background: var(--ok-bg);
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius);
+  padding: 1rem;
+  color: var(--ok-text);
+}
+.empty-message { font-weight: 600; margin-bottom: 0.25rem; }
+.empty-hint { font-size: 0.9rem; color: var(--ok-text); opacity: 0.9; }
+
+.error-message {
+  background: #fff;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius);
+  padding: 1rem;
+  color: var(--error-text);
+  margin-bottom: 1rem;
+}
+.back-link { margin-top: 0.5rem; }
+
+a { color: var(--accent); }
+a:hover { text-decoration: underline; }
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 1rem 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 2rem;
+}
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 1rem; }
+  .stat-value { font-size: 1.25rem; }
+  table { font-size: 0.85rem; }
+  th, td { padding: 0.4rem 0.5rem; }
+}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Upload a CSV &mdash; DataGuard{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <h1>Audit a CSV file</h1>
+  <p class="lead">
+    Upload a single CSV file to check its data quality. DataGuard reports missing
+    values, duplicate rows and headers, constant columns, mixed types, and more.
+    Your file is processed for this request only and is never stored.
+  </p>
+
+  <form method="post" action="/audit" enctype="multipart/form-data" class="upload-form">
+    <fieldset>
+      <legend>Choose a CSV file</legend>
+      <label class="file-label" for="csv-file">
+        <span class="file-label-text">Select file&hellip;</span>
+        <input id="csv-file" name="file" type="file" accept=".csv" required>
+      </label>
+      <p class="hint">Maximum file size: 10 MB. Extension must be <code>.csv</code>.</p>
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="button button-primary">Audit file</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

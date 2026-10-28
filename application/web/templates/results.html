@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Audit results &mdash; DataGuard{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <h1>Audit results for <span class="file-name">{{ vm.input_file }}</span></h1>
+
+  <div class="summary-grid">
+    <div class="stat-card">
+      <div class="stat-value">{{ vm.row_count }}</div>
+      <div class="stat-label">data rows</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ vm.column_count }}</div>
+      <div class="stat-label">columns</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ vm.total_missing }}</div>
+      <div class="stat-label">missing cells</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ vm.duplicate_row_count }}</div>
+      <div class="stat-label">duplicate rows</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ vm.duplicate_column_count }}</div>
+      <div class="stat-label">duplicate headers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ vm.constant_column_count }}</div>
+      <div class="stat-label">constant columns</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ vm.mixed_type_columns }}</div>
+      <div class="stat-label">mixed-type columns</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ vm.ragged_rows }}</div>
+      <div class="stat-label">ragged rows</div>
+    </div>
+  </div>
+
+  {% if vm.findings %}
+    <h2>Findings</h2>
+    <table class="findings">
+      <thead>
+        <tr>
+          <th scope="col">Type</th>
+          <th scope="col">Context</th>
+          <th scope="col">Count</th>
+          <th scope="col">What this means</th>
+          <th scope="col">Suggested fix</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in vm.findings %}
+        <tr>
+          <td class="finding-type"><span class="badge badge-warning">{{ f.type }}</span></td>
+          <td>{{ f.context }}</td>
+          <td>{{ f.count }}</td>
+          <td>{{ f.explanation }}</td>
+          <td>{{ f.remediation }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty-state">
+      <p class="empty-message">No data-quality issues detected.</p>
+      <p class="empty-hint">Your CSV passed all the checks DataGuard runs.</p>
+    </div>
+  {% endif %}
+
+  {% if vm.columns %}
+    <h2>Column details</h2>
+    <table class="columns">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Index</th>
+          <th scope="col">Type</th>
+          <th scope="col">Missing</th>
+          <th scope="col">Distinct</th>
+          <th scope="col">Constant?</th>
+          <th scope="col">Examples</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in vm.columns %}
+        <tr>
+          <td>{{ c.name }}</td>
+          <td>{{ c.index }}</td>
+          <td>{{ c.dtype }}</td>
+          <td>{{ c.missing_count }}</td>
+          <td>{{ c.distinct_count }}</td>
+          <td>{{ "yes" if c.is_constant else "-" }}</td>
+          <td class="examples">
+            {% for e in c.examples %}
+              {{ e }}{% if not loop.last %}, {% endif %}
+            {% else %}
+              &mdash;
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  <p class="back-link"><a href="/">Audit another file</a></p>
+</section>
+{% endblock %}
