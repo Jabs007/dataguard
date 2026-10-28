@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.build/
+dist/
+*.pyc
+
+# Project-local virtual environment
+.venv/
+
+# Generated data-quality reports (user output)
+*.dataguard.json
+reports/
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

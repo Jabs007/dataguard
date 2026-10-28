@@ -1,0 +1,7 @@
+name,age,score,city
+Alice,30,88,Nairobi
+Bob,25,95,
+,,,,
+Alice,30,88,Nairobi
+Carol,,,
+Bob, 25 ,abc,Nairobi
