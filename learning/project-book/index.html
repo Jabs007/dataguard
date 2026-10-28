@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataGuard — Project Learning Guide</title>
+<style>
+:root {
+--bg: #ffffff; --text: #111827; --muted: #6b7280; --border: #e5e7eb;
+--accent: #2563eb; --accent-hover: #1d4ed8; --code-bg: #f3f4f6;
+--code-border: #d1d5db; --warn: #b91c1c; --ok: #15803d; --note-bg: #eff6ff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+ line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; padding: 0; }
+a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+.skip { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+header { background: var(--bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+header .inner { max-width: 1000px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+h1 { font-size: 1.25rem; margin: 0; letter-spacing: -0.01em; }
+.repo-meta { color: var(--muted); font-size: 0.9rem; margin-left: auto; }
+.wrap { display: flex; max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem 4rem; gap: 1.5rem; }
+aside { width: 260px; flex-shrink: 0; position: sticky; top: 1.5rem; }
+aside h2 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 0.75rem; padding: 0 0.5rem; }
+nav ul { list-style: none; padding: 0; margin: 0; font-size: 0.95rem; }
+nav ul li { margin: 0.25rem 0; }
+nav ul a { display: block; padding: 0.45rem 0.75rem; border-radius: 6px; color: var(--text); }
+nav ul a:hover { background: var(--note-bg); }
+nav ul a.current { background: #dbeafe; font-weight: 600; }
+nav ul ul { margin-top: 0.3rem; padding-left: 1rem; border-left: 2px solid var(--border); }
+nav ul ul a { font-size: 0.9rem; padding: 0.35rem 0.75rem; opacity: 0.9; }
+main { flex: 1; min-width: 0; }
+section { margin-bottom: 3rem; }
+section h2 { font-size: 1.5rem; margin: 0 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 0.5rem; }
+section h2 .num { color: var(--muted); font-size: 1rem; }
+section h3 { font-size: 1.15rem; margin: 1.5rem 0 0.75rem; }
+section h4 { font-size: 1rem; margin: 1rem 0 0.5rem; color: var(--muted); }
+p { margin: 0 0 1rem; } .lead { font-size: 1.05rem; color: #374151; max-width: 72ch; }
+.badge { display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 0.1rem 0.5rem; border-radius: 999px; margin-left: 0.4rem; vertical-align: middle; background: #f3f4f4; }
+.badge.verified { background: #dcfce7; color: #166534; }
+.badge.inferred { background: #fef3c7; color: #92400e; }
+.badge.unknown { background: #e5e7eb; color: #4b5563; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; text-align: left; vertical-align: top; }
+th { background: #f9fafb; font-weight: 600; color: #374151; }
+tr:nth-child(even) { background: #fafafa; }
+pre { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; padding: 1rem; overflow-x: auto; margin: 1rem 0; font-size: 0.88rem; line-height: 1.5; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.filepath { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.25rem; padding: 0 1rem; border-left: 3px solid var(--accent); }
+.diagram { margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; text-align: center; }
+.diagram-caption { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+.callout { border-radius: 6px; padding: 1rem 1.25rem; margin: 1rem 0; }
+.callout.note { background: var(--note-bg); border-left: 4px solid var(--accent); }
+.callout.warn { background: #fef2f2; border-left: 4px solid var(--warn); }
+.callout.ok { background: #f0fdf4; border-left: 4px solid var(--ok); }
+.callout h4 { margin: 0 0 0.5rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.callout p { margin: 0; font-size: 0.95rem; }
+.exercise { border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; background: #fafafa; }
+.exercise h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.exercise ol { margin: 0; padding-left: 1.25rem; } .exercise li { margin: 0.4rem 0; }
+
+dl { margin: 1rem 0; }
+dt { font-weight: 600; margin: 0.75rem 0 0.25rem; color: var(--accent); }
+dd { margin: 0 0 0.75rem 1rem; font-size: 0.95rem; color: #374151; }
+footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; color: var(--muted); font-size: 0.85rem; max-width: 1000px; margin: 0 auto; }
+@media (max-width: 768px) {
+.wrap { flex-direction: column; padding: 1rem 1rem 3rem; }
+aside { width: 100%; position: static; margin-bottom: 1.5rem; }
+nav ul { display: flex; gap: 0.4rem; overflow-x: auto; padding-bottom: 0.5rem; }
+nav ul li { margin: 0; white-space: nowrap; }
+nav ul a { padding: 0.5rem 0.75rem; }
+/* ---------------------- inline diagrams ---------------------- */
+.flow { display: flex; align-items: stretch; flex-wrap: nowrap; margin: 1.25rem 0; }
+.flow-step { flex: 1 1 170px; background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; padding: 0.6rem 0.5rem; font-size: 0.82rem; font-weight: 600; text-align: center; color: var(--text); line-height: 1.35; }
+.flow-step code { display: block; margin-top: 0.15rem; font-weight: 500; font-size: 0.72rem; }
+.flow-arrow { align-self: center; color: var(--accent); font-size: 1.1rem; font-weight: 700; padding: 0 0.3rem; flex: 0 0 auto; }
+.flow.indent { flex: 1 1 220px; margin-left: 1rem; flex-wrap: wrap; min-width: 180px; }
+.flow.indent .flow-step { flex: 1 1 140px; }
+.flow-note { display: block; font-weight: 400; font-size: 0.7rem; color: var(--muted); margin-top: 0.15rem; }
+/* keyboard focus */
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<a href="#content" class="skip">Skip to main content</a>
+<header>
+<div class="inner">
+<h1>DataGuard — Project Learning Guide</h1>
+<div class="repo-meta">A beginner-friendly guide to the DataGuard CSV data-quality auditor</div>
+</div>
+</header>
+<div class="wrap">
+<aside>
+<h2>Contents</h2>
+<nav id="toc">
+<ul>
+<li><a href="#big-picture">1. The big picture</a></li>
+<li><a href="#system-glance">2. The system at a glance</a></li>
+<li><a href="#repo-tour">3. Repository tour</a></li>
+<li><a href="#how-to-run">4. How to run it</a></li>
+<li><a href="#execution-journey">5. The complete execution journey</a></li>
+<li><a href="#data-flow">6. Data flow</a></li>
+<li><a href="#module-walkthrough">7. Module-by-module walkthrough</a></li>
+<li><a href="#core-algorithms">8. The core algorithms</a></li>
+<li><a href="#data-structures">9. Data structures and contracts</a></li>
+<li><a href="#testing">10. Testing and quality checks</a></li>
+<li><a href="#outputs">11. Outputs and reporting</a></li>
+<li><a href="#failure-scenarios">12. Failure scenarios and debugging</a></li>
+<li><a href="#trade-offs">13. Security, reliability, and design trade-offs</a></li>
+<li><a href="#exercises">14. Hands-on learning exercises</a></li>
+<li><a href="#glossary-roadmap">15. Glossary and learning roadmap</a></li>
+</ul>
+</nav>
+</aside>
+<main id="content">
+<section id="big-picture">
+<h2><span class="num">1.</span> The big picture</h2>
+<p class="lead">DataGuard is a small, dependable command-line tool that audits a CSV file for data-quality problems and produces a human-readable text report plus a structured JSON report describing what it found.</p>
+<h3>What problem it solves</h3>
+<p>CSV files used in analysis or machine-learning pipelines often carry quality problems that are easy to miss and expensive to fix downstream:</p>
+<ul>
+<li>Missing values (empty cells, whitespace-only cells)</li>
+<li>Duplicate rows or duplicate column headers</li>
+<li>Constant columns (one distinct value) and all-missing columns</li>
+<li>Columns whose values mix types (e.g., <code>88</code>, <code>95</code>, <code>abc</code>)</li>
+<li>Rows with the wrong number of fields</li>
+</ul>
+<p>DataGuard detects these issues <em>up front</em> so a data engineer or analyst can decide what to fix before loading the file.</p>
+<h3>Who uses it</h3>
+<p><span class="badge verified">Verified</span> README.md: Data Science graduates and junior analysts building software-engineering skills, plus anyone who wants a fast, dependency-free CSV audit that never silently drops data.</p>
+<h3>What goes in, what comes out</h3>
+<table>
+<tr><th></th><th>Detail</th><th>Evidence</th></tr>
+<tr><td>Primary input</td><td>One CSV file path (comma-delimited)</td><td><span class="badge verified">Verified</span> dataguard/cli.py:40</td></tr>
+<tr><td>Encoding</td><td>utf-8-sig (strips a leading BOM if present)</td><td><span class="badge verified">Verified</span> dataguard/cli.py:46-47</td></tr>
+<tr><td>Primary output #1</td><td>Human-readable text report (to terminal or a file)</td><td><span class="badge verified">Verified</span> dataguard/reports.py:85</td></tr>
+<tr><td>Primary output #2</td><td>Structured JSON report (to a file or terminal)</td><td><span class="badge verified">Verified</span> dataguard/reports.py:79</td></tr>
+<tr><td>Exit codes</td><td>0 = success, 1 = runtime error, 2 = usage error</td><td><span class="badge verified">Verified</span> dataguard/cli.py:108-151</td></tr>
+</table>
+<h3>Value it provides</h3>
+<ul>
+<li><strong>Never modifies your input file.</strong> DataGuard only reads the CSV; it never overwrites or appends to it. (<span class="badge verified">Verified</span> dataguard/cli.py:93-97, 100-104)</li>
+<li><strong>No third-party runtime dependencies.</strong> Only the Python standard library is used at runtime.</li>
+<li><strong>Surfaces ambiguity instead of hiding it.</strong> If a column mixes types, DataGuard reports it as <code>mixed</code> with suspicious examples rather than silently coercing.</li>
+</ul>
+<div class="callout note"><h4>Why this matters for a data-science learner</h4><p>If you're used to loading CSVs into a dataframe and trusting the result, DataGuard shows you why "trust but verify" matters at the ingestion step. Catching 8 missing cells across 4 columns before modeling saves hours of debugging downstream.</p></div>
+</section>
+<section id="system-glance">
+<h2><span class="num">2.</span> The system at a glance</h2>
+<p>DataGuard has four responsibilities, each owned by a different module:</p>
+<div class="diagram">
+<div class="flow">
+  <div class="flow-step">CLI entry point<br/><code>dataguard/cli.py</code></div>
+  <div class="flow-arrow">⟶</div>
+  <div class="flow-step">CSV loader<br/><code>dataguard/profile.py</code></div>
+  <div class="flow-arrow">⟶</div>
+  <div class="flow-step">core engine<br/><code>dataguard/profile.py</code></div>
+  <div class="flow-arrow">⟶</div>
+  <div class="flow-step">report renderer<br/><code>dataguard/reports.py</code></div>
+  <div class="flow-arrow">⟶</div>
+  <div class="flow-step">report output</div>
+</div>
+<div class="diagram-caption">System architecture: CLI &#8594; loader &#8594; core engine &#8594; renderer &#8594; output. All modules use only the Python standard library.</div>
+</div>
+<table>
+<tr><th>Module</th><th>Responsibility</th><th>Key public symbols</th></tr>
+<tr><td><code>dataguard/cli.py</code></td><td>Command-line interface: argument parsing, running the pipeline, writing reports, exit codes.</td><td><code>main()</code>, <code>build_parser()</code></td></tr>
+<tr><td><code>dataguard/profile.py</code></td><td>CSV loading, per-column analysis, type inference, duplicate/missing/constant detection, rule validation.</td><td><code>load_csv()</code>, <code>profile_rows()</code>, <code>apply_rules()</code>, <code>ColumnResult</code>, <code>ProfileResult</code></td></tr>
+<tr><td><code>dataguard/reports.py</code></td><td>Render the same findings as text and JSON reports.</td><td><code>render_text()</code>, <code>render_json()</code></td></tr>
+<tr><td><code>dataguard/errors.py</code></td><td>Custom exceptions for path, encoding, CSV, and empty-file errors.</td><td><code>DataGuardError</code>, <code>InvalidPathError</code>, <code>EncodingError</code>, <code>MalformedCSVError</code>, <code>EmptyFileError</code></td></tr>
+<tr><td><code>dataguard/__init__.py</code></td><td>Package metadata.</td><td><code>__version__ = "0.1.0"</code></td></tr>
+<tr><td><code>dataguard/__main__.py</code></td><td>Entry point for <code>python -m dataguard</code>.</td><td>calls <code>cli.main()</code></td></tr>
+</table>
+<div class="callout note"><h4>Why this separation exists</h4><p>The profiling engine (<code>profile.py</code>) has no dependency on the CLI and no third-party libraries. It is deliberately side-effect free so it can be unit-tested in isolation. The CLI (<code>cli.py</code>) only handles terminal I/O and file writing.</p></div>
+</section>
+<section id="repo-tour">
+<h2><span class="num">3.</span> Repository tour</h2>
+<p>The DataGuard repository (excluding the virtual environment, caches, and Git internals) contains these files:</p>
+<table>
+<tr><th>Path</th><th>What it is</th><th>Why it matters</th></tr>
+<tr><td><code>README.md</code></td><td>Project documentation</td><td>States the problem, features, install/run/test instructions, and sample output.</td></tr>
+<tr><td><code>pyproject.toml</code></td><td>Project metadata + pytest config</td><td>Declares Python 3.11+, MIT license, setuptools build, and <code>testpaths = ["tests"]</code>.</td></tr>
+<tr><td><code>.gitignore</code></td><td>Git ignore rules</td><td>Ignores <code>.venv/</code>, <code>__pycache__/</code>, <code>*.dataguard.json</code> (generated reports), and editor files.</td></tr>
+<tr><td><code>dataguard/__init__.py</code></td><td>Package marker</td><td>Version <code>0.1.0</code>; makes <code>dataguard/</code> importable.</td></tr>
+<tr><td><code>dataguard/__main__.py</code></td><td>Module entry point</td><td>Enables <code>python -m dataguard</code>.</td></tr>
+<tr><td><code>dataguard/cli.py</code></td><td>Command-line interface</td><td>Parses arguments, orchestrates the run, writes reports, returns exit codes.</td></tr>
+<tr><td><code>dataguard/errors.py</td><td>Custom exceptions</td><td>Typed errors (<code>InvalidPathError</code>, <code>EncodingError</code>, etc.) so failures are clear, not tracebacks.</td></tr>
+<tr><td><code>dataguard/profile.py</code></td><td>Core profiling engine</td><td>Loads CSVs, analyzes columns, infers types, detects duplicates/missing/constant/ragged, applies rules.</td></tr>
+<tr><td><code>dataguard/reports.py</td><td>Report rendering</td><td>Produces identical findings as text and JSON.</td></tr>
+<tr><td><code>samples/</code></td><td>CSV fixtures + expected JSON</td><td><code>clean.csv</code>, <code>messy.csv</code>, <code>constant.csv</code>, <code>dupheader.csv</code> plus matching <code>.dataguard.json</code> expected outputs.</td></tr>
+<tr><td><code>tests/</code></td><td>Test suite (50 tests)</td><td><code>test_cli.py</code>, <code>test_profile.py</code>, <code>test_reports.py</code>, <code>test_edge_cases.py</code>, <code>conftest.py</code>.</td></tr>
+<tr><td><code>.venv/</code></td><td>Virtual environment</td><td>Local Python 3.12 environment with pytest installed. <span class="badge unknown">Unknown</span> to Git (ignored).</td></tr>
+</table>
+<div class="callout warn"><h4>Generated files are not tracked</h4><p>Any <code>.dataguard.json</code> file next to a sample CSV is a <em>generated report</em>, not source code. It is ignored by <code>.gitignore</code> and regenerated on every run.</p></div>
+</section>
+<section id="how-to-run">
+<h2><span class="num">4.</span> How to run it</h2>
+<p>All commands below were verified against the real repository.</p>
+<h3>Prerequisites</h3>
+<p><span class="badge verified">Verified</span> pyproject.toml: Python 3.11 or newer. The repository includes a project-local virtual environment at <code>.venv/</code> (Python 3.12.3) with <code>pytest</code> installed.</p>
+<h3>Setup</h3>
+<pre><code># From the DataGuard project root
+cd /home/jabs101/Documents/career-lab/dataguard
+.venv/bin/python --version   # Python 3.12.3
+</code></pre>
+<h3>Run the tool</h3>
+<pre><code># Basic run: profiles a CSV and prints a text report to the terminal
+.venv/bin/python -m dataguard samples/clean.csv
+</code></pre>
+<pre><code># Profile a messy file; JSON report written next to the input by default
+.venv/bin/python -m dataguard samples/messy.csv
+</code></pre>
+<pre><code># Custom text and JSON report paths
+.venv/bin/python -m dataguard samples/messy.csv -t messy.txt -j messy-report.json
+</code></pre>
+<pre><code># Apply required-column and expected-type rules
+.venv/bin/python -m dataguard samples/messy.csv \
+  --required-columns name \
+  --expected-types age=int,score=int
+</code></pre>
+<pre><code># Write reports to the terminal (use "-" as the target)
+.venv/bin/python -m dataguard -t - -j - samples/messy.csv
+</code></pre>
+<h3>Run the tests</h3>
+<pre><code>.venv/bin/python -m pytest
+</code></pre>
+<p><span class="badge verified">Verified</span> All 50 tests pass (<code>tests/test_cli.py</code>, <code>test_profile.py</code>, <code>test_reports.py</code>, <code>test_edge_cases.py</code>).</p>
+<div class="callout note"><h4>No install step needed</h4><p>DataGuard is not installed as a package; it is run from source via <code>python -m dataguard</code>. The only dependency at runtime is the Python standard library. <code>pytest</code> is a development dependency only.</p></div>
+</section>
+<section id="execution-journey">
+<h2><span class="num">5.</span> The complete execution journey</h2>
+<p>DataGuard processes a CSV file through a clear, linear pipeline:</p>
+<ol>
+<li><strong>CLI parsing</strong> (<code>dataguard/cli.py:build_parser()</code>): Parses command-line arguments, validates required arguments, and prepares report destinations (text and/or JSON). Handles exit codes 0, 1, and 2 as defined in the README.</li>
+<li><strong>CSV loading</strong> (<code>dataguard/profile.py:load_csv()</code>): Reads the CSV file with standard library <code>csv.reader</code>, strips blank lines, and returns rows as lists of strings. Handles encoding (utf-8-sig by default), invalid paths, non-regular files, and empty files with appropriate exceptions.</li>
+<li><strong>Profiling</strong> (<code>dataguard/profile.py:profile_rows()</code>): Analyzes each column for missing values, constant values, duplicate headers, ragged rows, type inference, and other quality issues. Returns a <code>ProfileResult</code> object containing all findings.</li>
+<li><strong>Rule application</strong> (<code>dataguard/profile.py:apply_rules()</code>): Applies user-specified required-column and expected-type rules to the profiling result, generating additional checks and status flags.</li>
+<li><strong>Report rendering</strong> (<code>dataguard/reports.py</code>): Generates human-readable text and JSON reports from the <code>ProfileResult</code> using stable, deterministic formatting.</li>
+<li><strong>Output writing</strong> (<code>dataguard/cli.py:main()</code>): Writes reports to specified destinations (terminal, files, or both) while preserving input file integrity. Handles file I/O errors with clear error messages and exit codes.</li>
+</ol>
+<p>This pipeline ensures separation of concerns: the profiling engine works in isolation from terminal I/O, and reports are generated from a single source of truth.</p>
+</section>
+<section id="data-flow">
+<h2><span class="num">6.</span> Data flow</h2>
+<p>Input data flows through these stages:</p>
+<table>
+<tr><th>Step</th><th>Function (file:line)</th><th>Input</th><th>Output / intermediate value</th><th>Branch taken</th></tr>
+<tr><td>1</td><td><code>load_csv</code> (profile.py:92)</td><td>CSV file path</td><td>List of rows (list of strings)</td><td>—</td></tr>
+<tr><td>2</td><td><code>profile_rows</code> (profile.py:236)</td><td>Raw rows + header</td><td><code>ProfileResult</code> object</td><td>—</td></tr>
+<tr><td>3</td><td><code>apply_rules</code> (profile.py:438)</td><td><code>ProfileResult</code></td><td><code>ProfileResult</code> with updated <code>rules</code> field</td><td>—</td></tr>
+<tr><td>4</td><td><code>render_text</code> (reports.py:85)</td><td><code>ProfileResult</code></td><td>Text report string</td><td>—</td></tr>
+<tr><td>4</td><td><code>render_json</code> (reports.py:79)</td><td><code>ProfileResult</code></td><td>JSON report string</td><td>—</td></tr>
+<tr><td>5</td><td><code>main</code> (cli.py:107)</td><td>CLI arguments</td><td>Exit code 0, 1, or 2</td><td>—</td></tr>
+</table>
+<p>Key observations:</p>
+<ul>
+<li>All processing happens in memory; no files are modified during execution.</li>
+<li>Type inference is conservative: a column reports one primitive type only when every non-missing cell agrees.</li>
+<li>Missing values are defined as empty or whitespace-only cells; values like "NA" are not automatically treated as missing.</li>
+</ul>
+</section>
+<section id="module-walkthrough">
+<h2><span class="num">7.</span> Module-by-module walkthrough</h2>
+<p>DataGuard consists of four main modules plus package structure:</p>
+<div class="diagram">
+<div class="flow">
+  <div class="flow-step"><code>dataguard/__main__.py</code></div>
+  <div class="flow-arrow">⟶</div>
+  <div class="flow-step"><code>dataguard/cli.py</code></div>
+  <div class="flow-arrow">⟶</div>
+  <div class="flow-step"><code>dataguard/profile.py</code></div>
+  <div class="flow-arrow">⟶</div>
+  <div class="flow-step"><code>dataguard/reports.py</code></div>
+  <div class="flow-arrow">⟶</div>
+  <div class="flow-step"><code>dataguard/errors.py</code></div>
+</div>
+<h3>Entry-point walkthrough</h3>
+<p><span class="filepath">dataguard/__main__.py:1-6</span></p>
+<pre><code>if __name__ == "__main__":
+    raise SystemExit(main())</code></pre>
+<p>The <code>__main__.py</code> file enables running DataGuard with <code>python -m dataguard</code>, delegating to <code>cli.main()</code>.</p>
+<h3>CLI module</h3>
+<p><span class="filepath">dataguard/cli.py:1-155</span></p>
+<p>Handles argument parsing, orchestrates execution flow, writes output files, and returns appropriate exit codes. Key functions:</p>
+<ul>
+<li><code>build_parser()</code>: Creates argument parser with help text and exit code documentation.</li>
+<li><code>main()</code>: Orchestrates the entire pipeline and returns exit code.</li>
+<li><code>_write_text()</code>: Writes text reports to files or stdout.</li>
+<li><code>_write_json()</code>: Writes JSON reports to files or stdout.</li>
+</ul>
+</section>
+</main>
+<footer>
+Generated as an in-repo learning guide for the DataGuard CSV data-quality auditor. All file paths, line numbers, and code excerpts are taken directly from the repository; nothing in the project was modified. Claims are tagged Verified / Inferred / Unknown.
+</footer>
+</body>
+</html>

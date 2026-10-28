@@ -1,20 +1,21 @@
-# Python
+# Python virtual environments
+application/.venv/
+application/.venv.pre-move-backup/
+
+# Python caches and test artifacts
 __pycache__/
 *.py[cod]
-*$py.class
 *.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Generated reports and build artifacts
+reports/
 .build/
 dist/
-*.pyc
 
-# Project-local virtual environment
-.venv/
-
-# Generated data-quality reports (user output)
-*.dataguard.json
-reports/
-
-# Editors and OS
+# Editors and operating system
 .vscode/
 .idea/
 *.swp
